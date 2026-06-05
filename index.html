@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>César Fotografia | Ensaios e Fotografia de Estúdio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header" id="topo">
+    <nav class="navbar">
+      <a class="brand" href="#topo"><span>César</span> Fotografia</a>
+      <button class="menu-toggle" aria-label="Abrir menu">☰</button>
+      <div class="nav-links">
+        <a href="#sobre">Sobre</a>
+        <a href="#portfolio">Portfólio</a>
+        <a href="#pacotes">Pacotes</a>
+        <a href="#avaliacoes">Avaliações</a>
+        <a href="#contato">Contato</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero section-reveal">
+      <div class="hero-content">
+        <p class="eyebrow">Fotografia de estúdio • Retratos • Ensaios</p>
+        <h1>Imagens sofisticadas para eternizar momentos únicos.</h1>
+        <p class="hero-text">Ensaios fotográficos com direção leve, estética moderna e um olhar sensível para valorizar sua história, sua marca ou sua família.</p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#pacotes">Ver pacotes</a>
+          <a class="btn secondary" href="#portfolio">Conhecer portfólio</a>
+        </div>
+      </div>
+      <div class="hero-card" aria-label="Imagem destaque">
+        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80" alt="Retrato fotográfico em estúdio" />
+        <div class="floating-badge">+ criatividade<br><strong>+ emoção</strong></div>
+      </div>
+    </section>
+
+    <section id="sobre" class="about section-reveal">
+      <div>
+        <p class="eyebrow">Sobre mim</p>
+        <h2>Fotografia com cuidado, direção e personalidade.</h2>
+      </div>
+      <p>Sou fotógrafo especializado em criar experiências leves e memoráveis. Meu objetivo é fazer você se sentir confortável durante o ensaio e entregar imagens com acabamento profissional, emoção e identidade visual.</p>
+    </section>
+
+    <section id="portfolio" class="portfolio section-reveal">
+      <div class="section-heading">
+        <p class="eyebrow">Portfólio</p>
+        <h2>Trabalhos recentes</h2>
+        <p>As fotos abaixo podem ser alteradas pelo painel administrativo.</p>
+      </div>
+      <div class="filters" id="portfolioFilters"></div>
+      <div class="gallery" id="portfolioGrid"></div>
+    </section>
+
+    <section id="pacotes" class="packages section-reveal">
+      <div class="section-heading">
+        <p class="eyebrow">Pacotes</p>
+        <h2>Planos para diferentes momentos</h2>
+        <p>Todos os pacotes podem ser editados ou criados pelo painel administrativo.</p>
+      </div>
+      <div class="package-grid" id="packageGrid"></div>
+    </section>
+
+    <section id="avaliacoes" class="testimonials section-reveal">
+      <div class="section-heading">
+        <p class="eyebrow">Avaliações</p>
+        <h2>O que os clientes dizem</h2>
+      </div>
+      <div class="testimonial-grid" id="testimonialGrid"></div>
+    </section>
+
+    <section id="contato" class="contact section-reveal">
+      <div>
+        <p class="eyebrow">Contato</p>
+        <h2>Vamos conversar sobre seu ensaio?</h2>
+        <p>Escolha a melhor forma de contato abaixo. Não há formulário de envio de e-mail nesta página.</p>
+      </div>
+      <div class="contact-card" id="contactList"></div>
+    </section>
+  </main>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-close" aria-label="Fechar imagem">×</button>
+    <img src="" alt="Foto ampliada" />
+    <p></p>
+  </div>
+
+  <footer>
+    <p>© <span id="year"></span> César Fotografia. Todos os direitos reservados.</p>
+    <a href="admin/index.html">Área administrativa</a>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
