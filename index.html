@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>César Fotografia | Ensaios e Fotografia de Estúdio</title>
+  <title>CSRFotos | Ensaios e Fotografia de Estúdio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -12,14 +12,10 @@
 <body>
   <header class="site-header" id="topo">
     <nav class="navbar">
-      <a class="brand" href="#topo"><span>César</span> Fotografia</a>
+      <a class="brand" href="#topo"><span id="brandHighlight">CSR</span><span id="brandRest">Fotos</span></a>
       <button class="menu-toggle" aria-label="Abrir menu">☰</button>
       <div class="nav-links">
-        <a href="#sobre">Sobre</a>
-        <a href="#portfolio">Portfólio</a>
-        <a href="#pacotes">Pacotes</a>
-        <a href="#avaliacoes">Avaliações</a>
-        <a href="#contato">Contato</a>
+        <a id="navAbout" href="#sobre"></a><a id="navPortfolio" href="#portfolio"></a><a id="navPackages" href="#pacotes"></a><a id="navTestimonials" href="#avaliacoes"></a><a id="navContact" href="#contato"></a>
       </div>
     </nav>
   </header>
@@ -27,77 +23,29 @@
   <main>
     <section class="hero section-reveal">
       <div class="hero-content">
-        <p class="eyebrow">Fotografia de estúdio • Retratos • Ensaios</p>
-        <h1>Imagens sofisticadas para eternizar momentos únicos.</h1>
-        <p class="hero-text">Ensaios fotográficos com direção leve, estética moderna e um olhar sensível para valorizar sua história, sua marca ou sua família.</p>
-        <div class="hero-actions">
-          <a class="btn primary" href="#pacotes">Ver pacotes</a>
-          <a class="btn secondary" href="#portfolio">Conhecer portfólio</a>
-        </div>
+        <p class="eyebrow" id="heroEyebrow"></p><h1 id="heroTitle"></h1><p class="hero-text" id="heroText"></p>
+        <div class="hero-actions"><a class="btn primary" id="heroPrimaryButton" href="#pacotes"></a><a class="btn secondary" id="heroSecondaryButton" href="#portfolio"></a></div>
       </div>
       <div class="hero-card" aria-label="Imagem destaque">
-        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80" alt="Retrato fotográfico em estúdio" />
-        <div class="floating-badge">+ criatividade<br><strong>+ emoção</strong></div>
+        <img id="heroImage" src="" alt="" />
+        <div class="floating-badge"><span id="heroBadgeLine1"></span><br><strong id="heroBadgeLine2"></strong></div>
       </div>
     </section>
 
-    <section id="sobre" class="about section-reveal">
-      <div>
-        <p class="eyebrow">Sobre mim</p>
-        <h2>Fotografia com cuidado, direção e personalidade.</h2>
-      </div>
-      <p>Sou fotógrafo especializado em criar experiências leves e memoráveis. Meu objetivo é fazer você se sentir confortável durante o ensaio e entregar imagens com acabamento profissional, emoção e identidade visual.</p>
-    </section>
-
-    <section id="portfolio" class="portfolio section-reveal">
-      <div class="section-heading">
-        <p class="eyebrow">Portfólio</p>
-        <h2>Trabalhos recentes</h2>
-        <p>As fotos abaixo podem ser alteradas pelo painel administrativo.</p>
-      </div>
-      <div class="filters" id="portfolioFilters"></div>
-      <div class="gallery" id="portfolioGrid"></div>
-    </section>
-
-    <section id="pacotes" class="packages section-reveal">
-      <div class="section-heading">
-        <p class="eyebrow">Pacotes</p>
-        <h2>Planos para diferentes momentos</h2>
-        <p>Todos os pacotes podem ser editados ou criados pelo painel administrativo.</p>
-      </div>
-      <div class="package-grid" id="packageGrid"></div>
-    </section>
-
-    <section id="avaliacoes" class="testimonials section-reveal">
-      <div class="section-heading">
-        <p class="eyebrow">Avaliações</p>
-        <h2>O que os clientes dizem</h2>
-      </div>
-      <div class="testimonial-grid" id="testimonialGrid"></div>
-    </section>
-
-    <section id="contato" class="contact section-reveal">
-      <div>
-        <p class="eyebrow">Contato</p>
-        <h2>Vamos conversar sobre seu ensaio?</h2>
-        <p>Escolha a melhor forma de contato abaixo. Não há formulário de envio de e-mail nesta página.</p>
-      </div>
-      <div class="contact-card" id="contactList"></div>
-    </section>
+    <section id="sobre" class="about section-reveal"><div><p class="eyebrow" id="aboutEyebrow"></p><h2 id="aboutTitle"></h2></div><p id="aboutText"></p></section>
+    <section id="portfolio" class="portfolio section-reveal"><div class="section-heading"><p class="eyebrow" id="portfolioEyebrow"></p><h2 id="portfolioTitle"></h2><p id="portfolioText"></p></div><div class="filters" id="portfolioFilters"></div><div class="gallery" id="portfolioGrid"></div></section>
+    <section id="pacotes" class="packages section-reveal"><div class="section-heading"><p class="eyebrow" id="packagesEyebrow"></p><h2 id="packagesTitle"></h2><p id="packagesText"></p></div><div class="package-grid" id="packageGrid"></div></section>
+    <section id="avaliacoes" class="testimonials section-reveal"><div class="section-heading"><p class="eyebrow" id="testimonialsEyebrow"></p><h2 id="testimonialsTitle"></h2></div><div class="testimonial-grid" id="testimonialGrid"></div></section>
+    <section id="contato" class="contact section-reveal"><div><p class="eyebrow" id="contactEyebrow"></p><h2 id="contactTitle"></h2><p id="contactText"></p></div><div class="contact-card" id="contactList"></div></section>
   </main>
 
-  <div class="lightbox" id="lightbox" aria-hidden="true">
-    <button class="lightbox-close" aria-label="Fechar imagem">×</button>
-    <img src="" alt="Foto ampliada" />
-    <p></p>
+  <div class="album-lightbox" id="albumLightbox" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="album-toolbar"><div><strong id="albumTitle"></strong><span id="albumMeta"></span></div><button class="album-close" id="albumClose">×</button></div>
+    <div class="album-stage"><button class="album-nav previous" id="albumPrevious">‹</button><img id="albumImage" src="" alt="" /><button class="album-nav next" id="albumNext">›</button></div>
+    <div class="album-thumbnails" id="albumThumbnails"></div>
   </div>
 
-  <footer>
-    <p>© <span id="year"></span> César Fotografia. Todos os direitos reservados.</p>
-    <a href="admin/index.html">Área administrativa</a>
-  </footer>
-
-  <script src="data.js"></script>
-  <script src="script.js"></script>
+  <footer><p>© <span id="year"></span> <span id="footerText"></span></p><a id="adminLink" href="admin/index.html"></a></footer>
+  <script src="data.js"></script><script src="script.js"></script>
 </body>
 </html>

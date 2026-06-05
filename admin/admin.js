@@ -1,187 +1,21 @@
-const ADMIN_PIN = "4321";
-const STORAGE_KEY = "cesar_fotografia_site_data";
-let data = JSON.parse(localStorage.getItem(STORAGE_KEY)) || DEFAULT_SITE_DATA;
-
-const $ = (selector) => document.querySelector(selector);
-const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-
-function login() {
-  if ($("#pinInput").value === ADMIN_PIN) {
-    $("#loginCard").classList.add("hidden");
-    $("#dashboard").classList.remove("hidden");
-    renderAll();
-  } else {
-    alert("PIN incorreto.");
-  }
-}
-
-function field(label, value, onInput, type = "text") {
-  const wrapper = document.createElement("label");
-  wrapper.innerHTML = `<span>${label}</span>`;
-  const input = type === "textarea" ? document.createElement("textarea") : document.createElement("input");
-  input.value = value || "";
-  input.addEventListener("input", () => { onInput(input.value); save(); });
-  wrapper.appendChild(input);
-  return wrapper;
-}
-
-function removeButton(callback) {
-  const button = document.createElement("button");
-  button.className = "remove-btn";
-  button.textContent = "Remover";
-  button.addEventListener("click", () => {
-    if (confirm("Deseja remover este item?")) { callback(); save(); renderAll(); }
-  });
-  return button;
-}
-
-function renderPackages() {
-  const editor = $("#packagesEditor");
-  editor.innerHTML = "";
-  data.packages.forEach((pkg, index) => {
-    const card = document.createElement("article");
-    card.className = "editor-card";
-    const grid = document.createElement("div");
-    grid.className = "form-grid";
-    grid.append(
-      field("Nome do pacote", pkg.name, v => pkg.name = v),
-      field("Preço", pkg.price, v => pkg.price = v),
-      field("Descrição", pkg.description, v => pkg.description = v, "textarea"),
-      field("Itens inclusos, separados por vírgula", pkg.items.join(", "), v => pkg.items = v.split(",").map(i => i.trim()).filter(Boolean), "textarea")
-    );
-    grid.children[2].classList.add("full");
-    grid.children[3].classList.add("full");
-    const actions = document.createElement("div");
-    actions.className = "card-actions";
-    actions.append(removeButton(() => data.packages.splice(index, 1)));
-    card.append(grid, actions);
-    editor.appendChild(card);
-  });
-}
-
-function renderContacts() {
-  const editor = $("#contactsEditor");
-  editor.innerHTML = "";
-  data.contacts.forEach((contact, index) => {
-    const card = document.createElement("article");
-    card.className = "editor-card";
-    const grid = document.createElement("div");
-    grid.className = "form-grid";
-    grid.append(
-      field("Tipo", contact.type, v => contact.type = v),
-      field("Texto exibido", contact.value, v => contact.value = v),
-      field("Link", contact.link, v => contact.link = v)
-    );
-    grid.children[2].classList.add("full");
-    const actions = document.createElement("div");
-    actions.className = "card-actions";
-    actions.append(removeButton(() => data.contacts.splice(index, 1)));
-    card.append(grid, actions);
-    editor.appendChild(card);
-  });
-}
-
-function renderTestimonials() {
-  const editor = $("#testimonialsEditor");
-  editor.innerHTML = "";
-  data.testimonials.forEach((item, index) => {
-    const card = document.createElement("article");
-    card.className = "editor-card";
-    const grid = document.createElement("div");
-    grid.className = "form-grid";
-    grid.append(
-      field("Nome do cliente", item.name, v => item.name = v),
-      field("Avaliação", item.text, v => item.text = v, "textarea")
-    );
-    grid.children[1].classList.add("full");
-    const actions = document.createElement("div");
-    actions.className = "card-actions";
-    actions.append(removeButton(() => data.testimonials.splice(index, 1)));
-    card.append(grid, actions);
-    editor.appendChild(card);
-  });
-}
-
-function renderPortfolio() {
-  const editor = $("#portfolioEditor");
-  editor.innerHTML = "";
-  data.portfolio.forEach((photo, index) => {
-    const card = document.createElement("article");
-    card.className = "editor-card";
-    const preview = document.createElement("img");
-    preview.className = "preview-img";
-    preview.src = photo.image;
-    preview.alt = photo.title;
-    const grid = document.createElement("div");
-    grid.className = "form-grid";
-    grid.append(
-      field("Título", photo.title, v => photo.title = v),
-      field("Categoria", photo.category, v => photo.category = v),
-      field("URL da imagem", photo.image, v => { photo.image = v; preview.src = v; })
-    );
-    grid.children[2].classList.add("full");
-    const actions = document.createElement("div");
-    actions.className = "card-actions";
-    actions.append(removeButton(() => data.portfolio.splice(index, 1)));
-    card.append(preview, grid, actions);
-    editor.appendChild(card);
-  });
-}
-
-function renderAll() {
-  save();
-  renderPackages();
-  renderContacts();
-  renderTestimonials();
-  renderPortfolio();
-}
-
-$("#loginButton").addEventListener("click", login);
-$("#pinInput").addEventListener("keydown", e => { if (e.key === "Enter") login(); });
-
-$("#addPackage").addEventListener("click", () => { data.packages.push({ name: "Novo pacote", price: "R$ 0", description: "Descrição do pacote", items: ["Item incluso"] }); renderAll(); });
-$("#addContact").addEventListener("click", () => { data.contacts.push({ type: "Novo contato", value: "Texto", link: "#" }); renderAll(); });
-$("#addTestimonial").addEventListener("click", () => { data.testimonials.push({ name: "Cliente", text: "Escreva a avaliação aqui." }); renderAll(); });
-$("#addPhoto").addEventListener("click", () => { data.portfolio.push({ title: "Nova foto", category: "Categoria", image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80" }); renderAll(); });
-
-$("#exportButton").addEventListener("click", () => {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "dados-site-fotografia.json";
-  a.click();
-  URL.revokeObjectURL(url);
-});
-
-$("#importInput").addEventListener("change", event => {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => {
-    try {
-      data = JSON.parse(reader.result);
-      renderAll();
-      alert("Dados importados com sucesso.");
-    } catch {
-      alert("Arquivo inválido.");
-    }
-  };
-  reader.readAsText(file);
-});
-
-$("#resetButton").addEventListener("click", () => {
-  if (confirm("Restaurar os dados de exemplo?")) {
-    data = structuredClone(DEFAULT_SITE_DATA);
-    renderAll();
-  }
-});
-
-document.querySelectorAll(".tab").forEach(tab => {
-  tab.addEventListener("click", () => {
-    document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
-    tab.classList.add("active");
-    $(`#${tab.dataset.tab}Panel`).classList.add("active");
-  });
-});
+const ADMIN_PIN="1234", STORAGE_KEY="csrfotos_site_data", LEGACY_STORAGE_KEY="cesar_fotografia_site_data";
+const stored=localStorage.getItem(STORAGE_KEY)||localStorage.getItem(LEGACY_STORAGE_KEY); let data=normalizeSiteData(stored?JSON.parse(stored):DEFAULT_SITE_DATA);
+const $=s=>document.querySelector(s), save=()=>localStorage.setItem(STORAGE_KEY,JSON.stringify(data));
+function login(){if($("#pinInput").value===ADMIN_PIN){$("#loginCard").classList.add("hidden");$("#dashboard").classList.remove("hidden");renderAll()}else alert("PIN incorreto.")}
+function field(label,value,onInput,type="text"){const w=document.createElement("label");w.innerHTML=`<span>${label}</span>`;const i=type==="textarea"?document.createElement("textarea"):document.createElement("input");i.value=value||"";i.addEventListener("input",()=>{onInput(i.value);save()});w.appendChild(i);return w}
+function removeButton(cb){const b=document.createElement("button");b.className="remove-btn";b.textContent="Remover";b.onclick=()=>{if(confirm("Deseja remover este item?")){cb();renderAll()}};return b}
+function cardWith(fields,removeCb,preview){const c=document.createElement("article");c.className="editor-card";if(preview)c.append(preview);const g=document.createElement("div");g.className="form-grid";fields.forEach((f,i)=>{g.append(f);if(i>=2||f.querySelector("textarea"))f.classList.add("full")});c.append(g);if(removeCb){const a=document.createElement("div");a.className="card-actions";a.append(removeButton(removeCb));c.append(a)}return c}
+const TEXT_LABELS={siteTitle:"Título da aba do navegador",brandHighlight:"Marca destacada",brandRest:"Complemento da marca",navAbout:"Menu: Sobre",navPortfolio:"Menu: Portfólio",navPackages:"Menu: Pacotes",navTestimonials:"Menu: Avaliações",navContact:"Menu: Contato",heroEyebrow:"Destaque acima do título principal",heroTitle:"Título principal",heroText:"Texto principal",heroPrimaryButton:"Botão principal",heroSecondaryButton:"Botão secundário",heroImage:"URL da imagem principal",heroImageAlt:"Descrição da imagem principal",heroBadgeLine1:"Selo na imagem: linha 1",heroBadgeLine2:"Selo na imagem: linha 2",aboutEyebrow:"Sobre: destaque",aboutTitle:"Sobre: título",aboutText:"Sobre: texto",portfolioEyebrow:"Portfólio: destaque",portfolioTitle:"Portfólio: título",portfolioText:"Portfólio: texto",packagesEyebrow:"Pacotes: destaque",packagesTitle:"Pacotes: título",packagesText:"Pacotes: texto",packageButton:"Texto do botão dos pacotes",testimonialsEyebrow:"Avaliações: destaque",testimonialsTitle:"Avaliações: título",contactEyebrow:"Contato: destaque",contactTitle:"Contato: título",contactText:"Contato: texto",footerText:"Texto do rodapé",adminLink:"Link da área administrativa",galleryCloseLabel:"Acessibilidade: fechar galeria",galleryPreviousLabel:"Acessibilidade: foto anterior",galleryNextLabel:"Acessibilidade: próxima foto",galleryCounterLabel:"Texto do contador da galeria"};
+function renderTexts(){const e=$("#textsEditor");e.innerHTML="";const c=document.createElement("article");c.className="editor-card";const g=document.createElement("div");g.className="form-grid";Object.entries(TEXT_LABELS).forEach(([k,l])=>{const large=/Text|Title|footer|gallery/.test(k);const f=field(l,data.texts[k],v=>data.texts[k]=v,large?"textarea":"text");if(large)f.classList.add("full");g.append(f)});c.append(g);e.append(c)}
+function renderPackages(){const e=$("#packagesEditor");e.innerHTML="";data.packages.forEach((p,x)=>e.append(cardWith([field("Nome",p.name,v=>p.name=v),field("Preço",p.price,v=>p.price=v),field("Descrição",p.description,v=>p.description=v,"textarea"),field("Itens, separados por vírgula",p.items.join(", "),v=>p.items=v.split(",").map(s=>s.trim()).filter(Boolean),"textarea")],()=>data.packages.splice(x,1))))}
+function renderContacts(){const e=$("#contactsEditor");e.innerHTML="";data.contacts.forEach((c,x)=>e.append(cardWith([field("Tipo",c.type,v=>c.type=v),field("Texto exibido",c.value,v=>c.value=v),field("Link",c.link,v=>c.link=v)],()=>data.contacts.splice(x,1))))}
+function renderTestimonials(){const e=$("#testimonialsEditor");e.innerHTML="";data.testimonials.forEach((t,x)=>e.append(cardWith([field("Nome do cliente",t.name,v=>t.name=v),field("Avaliação",t.text,v=>t.text=v,"textarea")],()=>data.testimonials.splice(x,1))))}
+function renderPortfolio(){const e=$("#portfolioEditor");e.innerHTML="";data.portfolio.forEach((a,x)=>{const p=document.createElement("img");p.className="preview-img";p.src=a.cover||a.images[0];e.append(cardWith([field("Título do ensaio",a.title,v=>a.title=v),field("Categoria",a.category,v=>a.category=v),field("URL da capa",a.cover,v=>{a.cover=v;p.src=v}),field("Fotos do álbum — uma URL por linha",a.images.join("\n"),v=>a.images=v.split(/\n/).map(s=>s.trim()).filter(Boolean),"textarea")],()=>data.portfolio.splice(x,1),p))})}
+function renderAll(){save();renderTexts();renderPortfolio();renderPackages();renderContacts();renderTestimonials()}
+$("#loginButton").onclick=login;$("#pinInput").onkeydown=e=>{if(e.key==="Enter")login()};
+$("#addAlbum").onclick=()=>{data.portfolio.push({title:"Novo ensaio",category:"Categoria",cover:"https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=80",images:["https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=85"]});renderAll()};
+$("#addPackage").onclick=()=>{data.packages.push({name:"Novo pacote",price:"R$ 0",description:"Descrição",items:["Item incluso"]});renderAll()};$("#addContact").onclick=()=>{data.contacts.push({type:"Novo contato",value:"Texto",link:"#"});renderAll()};$("#addTestimonial").onclick=()=>{data.testimonials.push({name:"Cliente",text:"Avaliação"});renderAll()};
+$("#exportButton").onclick=()=>{const u=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:"application/json"})),a=document.createElement("a");a.href=u;a.download="dados-csrfotos.json";a.click();URL.revokeObjectURL(u)};
+$("#importInput").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{data=normalizeSiteData(JSON.parse(r.result));renderAll();alert("Dados importados com sucesso.")}catch{alert("Arquivo inválido.")}};r.readAsText(f)};
+$("#resetButton").onclick=()=>{if(confirm("Restaurar os dados de exemplo?")){data=normalizeSiteData(DEFAULT_SITE_DATA);renderAll()}};
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{document.querySelectorAll(".tab,.panel").forEach(i=>i.classList.remove("active"));t.classList.add("active");$("#"+t.dataset.tab+"Panel").classList.add("active")});
