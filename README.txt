@@ -10,3 +10,9 @@ Como usar:
 
 As alterações ficam salvas no localStorage do navegador. Use Exportar/Importar dados para transferi-las entre computadores.
 Este projeto é estático e não precisa de banco de dados. Para imagens, use URLs públicas.
+
+
+Atualização de enquadramento:
+- No painel admin, em "Textos do site", use os controles Horizontal, Vertical e Zoom para ajustar a imagem principal dentro da máscara.
+- Em "Álbuns", use os mesmos controles para ajustar a capa de cada trabalho recente sem cortar partes importantes.
+- As alterações ficam salvas automaticamente no navegador e também entram no arquivo exportado em JSON.

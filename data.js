@@ -15,6 +15,7 @@ const DEFAULT_SITE_DATA = {
     heroSecondaryButton: "Conhecer portfólio",
     heroImage: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=900&q=80",
     heroImageAlt: "Retrato fotográfico em estúdio",
+    heroImageFit: { x: 50, y: 50, zoom: 1 },
     heroBadgeLine1: "+ criatividade",
     heroBadgeLine2: "+ emoção",
     aboutEyebrow: "Sobre mim",
@@ -72,10 +73,31 @@ function normalizeSiteData(rawData) {
   normalized.contacts = Array.isArray(source.contacts) ? source.contacts : structuredClone(DEFAULT_SITE_DATA.contacts);
   normalized.packages = Array.isArray(source.packages) ? source.packages : structuredClone(DEFAULT_SITE_DATA.packages);
   normalized.testimonials = Array.isArray(source.testimonials) ? source.testimonials : structuredClone(DEFAULT_SITE_DATA.testimonials);
+  normalized.texts.heroImageFit = normalizeImageFit(source.texts?.heroImageFit || source.heroImageFit || DEFAULT_SITE_DATA.texts.heroImageFit);
   normalized.portfolio = (Array.isArray(source.portfolio) ? source.portfolio : structuredClone(DEFAULT_SITE_DATA.portfolio)).map(item => {
     const cover = item.cover || item.image || "";
     const images = Array.isArray(item.images) && item.images.length ? item.images.filter(Boolean) : [cover].filter(Boolean);
-    return { title: item.title || "Ensaio", category: item.category || "Portfólio", cover: cover || images[0] || "", images };
+    return {
+      title: item.title || "Ensaio",
+      category: item.category || "Portfólio",
+      cover: cover || images[0] || "",
+      coverFit: normalizeImageFit(item.coverFit || item.fit || { x: 50, y: 50, zoom: 1 }),
+      images
+    };
   });
   return normalized;
+}
+
+function normalizeImageFit(fit) {
+  const source = fit && typeof fit === "object" ? fit : {};
+  const clamp = (value, min, max, fallback) => {
+    const number = Number(value);
+    if (!Number.isFinite(number)) return fallback;
+    return Math.min(max, Math.max(min, number));
+  };
+  return {
+    x: clamp(source.x, 0, 100, 50),
+    y: clamp(source.y, 0, 100, 50),
+    zoom: clamp(source.zoom, 1, 2.5, 1)
+  };
 }

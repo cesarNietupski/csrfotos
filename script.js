@@ -8,13 +8,17 @@ let currentImageIndex = 0;
 const $ = selector => document.querySelector(selector);
 const $$ = selector => document.querySelectorAll(selector);
 const escapeHtml = value => String(value ?? "").replace(/[&<>'"]/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[char]));
+function imageFitStyle(fit) {
+  const safe = normalizeImageFit(fit);
+  return `--fit-x:${safe.x}%;--fit-y:${safe.y}%;--fit-zoom:${safe.zoom};--fit-hover-zoom:${(safe.zoom * 1.08).toFixed(3)};`;
+}
 
 function saveData() { localStorage.setItem(STORAGE_KEY, JSON.stringify(siteData)); }
 function renderTexts() {
   const t = siteData.texts;
   document.title = t.siteTitle;
   Object.entries(t).forEach(([key, value]) => { const el = document.getElementById(key); if (el && key !== "heroImage" && key !== "heroImageAlt") el.textContent = value; });
-  $("#heroImage").src = t.heroImage; $("#heroImage").alt = t.heroImageAlt;
+  $("#heroImage").src = t.heroImage; $("#heroImage").alt = t.heroImageAlt; $("#heroImage").style.cssText = imageFitStyle(t.heroImageFit);
   $("#albumClose").ariaLabel = t.galleryCloseLabel; $("#albumPrevious").ariaLabel = t.galleryPreviousLabel; $("#albumNext").ariaLabel = t.galleryNextLabel;
 }
 function renderContacts() { $("#contactList").innerHTML = siteData.contacts.map(c => `<a class="contact-item" href="${escapeHtml(c.link)}" target="_blank" rel="noopener"><span>${escapeHtml(c.type)}</span><strong>${escapeHtml(c.value)}</strong></a>`).join(""); }
@@ -28,7 +32,7 @@ function renderPortfolioFilters() {
 function renderPortfolio() {
   renderPortfolioFilters();
   const albums = currentCategory === "Todos" ? siteData.portfolio : siteData.portfolio.filter(i => i.category === currentCategory);
-  $("#portfolioGrid").innerHTML = albums.map(a => `<button class="photo-card" data-index="${siteData.portfolio.indexOf(a)}"><img src="${escapeHtml(a.cover || a.images[0])}" alt="${escapeHtml(a.title)}" loading="lazy" /><span>${escapeHtml(a.category)} • ${a.images.length} fotos</span><strong>${escapeHtml(a.title)}</strong></button>`).join("");
+  $("#portfolioGrid").innerHTML = albums.map(a => `<button class="photo-card" data-index="${siteData.portfolio.indexOf(a)}"><img style="${imageFitStyle(a.coverFit)}" src="${escapeHtml(a.cover || a.images[0])}" alt="${escapeHtml(a.title)}" loading="lazy" /><span>${escapeHtml(a.category)} • ${a.images.length} fotos</span><strong>${escapeHtml(a.title)}</strong></button>`).join("");
   $$(".photo-card").forEach(card => card.addEventListener("click", () => openAlbum(Number(card.dataset.index))));
 }
 function openAlbum(index) { currentAlbum = siteData.portfolio[index]; currentImageIndex = 0; renderAlbum(); $("#albumLightbox").classList.add("show"); $("#albumLightbox").setAttribute("aria-hidden", "false"); document.body.classList.add("no-scroll"); }
