@@ -19,7 +19,7 @@ const DEFAULT_SITE_DATA = {
     heroBadgeLine1: "+ criatividade",
     heroBadgeLine2: "+ emoção",
     aboutEyebrow: "Sobre mim",
-    aboutTitle: "Fotografia com cuidado, direção e personalidade.",
+    aboutTitle: "Fotografia com cuidado, direção e personalidade e humanidade.",
     aboutText: "Sou fotógrafo especializado em criar experiências leves e memoráveis. Meu objetivo é fazer você se sentir confortável durante o ensaio e entregar imagens com acabamento profissional, emoção e identidade visual.",
     portfolioEyebrow: "Portfólio",
     portfolioTitle: "Trabalhos recentes",
